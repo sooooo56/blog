@@ -1,6 +1,6 @@
-package com.korea.blog.domain.note.controller;
+package com.korea.blog.domain.main.note.controller;
 
-import com.korea.blog.domain.note.service.NoteService;
+import com.korea.blog.domain.main.note.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
