@@ -3,33 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>main</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<div class="bg-blue-300 p-2 h-[10vh] p-2">logo</div>
-
-<div class="content flex bg-indigo-50 h-[90vh]">
-    <div class="left bg-indigo-300 h-[100%] w-[15%] p-2">
+<div class="logo bg-green-300 h-[10vh] p-2">
+    logo
+</div>
+<div class="content flex bg-yellow-300 h-[90vh]">
+    <div class="left bg-red-300 h-[100%] w-[15%] p-2">
         <ul>
-            <li th:each="note : ${noteList}" th:text="${note.title}"></li>
+            <li th:class="${note.id == selectedNote.id} ? 'bg-blue-500' : ''" th:each="note : ${noteList}">
+                <a th:href="@{|/notes/${note.id}|}" th:text="${note.title}"></a>
+            </li>
         </ul>
         <form action="/notes/write" method="post">
-            <input type="submit" class="btn btn-info" value="추가">
+            <input type="submit" class="btn btn-info" value="추가"/>
         </form>
     </div>
-    <div class="right bg-indigo-200 h-[100%] w-[85%] p-2">
+    <div class="right bg-blue-300 h-[100%] w-[85%] p-2">
         <div class="flex flex-col gap-2">
-            <input class="input" type="text">
-            <textarea class="textarea textarea-bordered" placeholder="Bio"></textarea>
+            <input class="input" type="text" id="title" th:value="${selectedNote.title}">
+            <textarea class="textarea textarea-bordered" id="content" th:text="${selectedNote.content}"></textarea>
         </div>
-
-        <div class="mt-[10px]">
-            <button class="btn btn-success">수정</button>
-            <button class="btn btn-error">삭제</button>
+        <div class="flex mt-[10px]">
+            <form th:action="@{|/notes/modify/${selectedNote.id}|}" method="post" onsubmit="updateNote(this); return false;">
+                <input type="submit" value="수정" class="btn btn-success"/>
+            </form>
+            <form th:action="@{|/notes/delete/${selectedNote.id}|}" method="post" onsubmit="deleteNote(this); return false;">
+                <input type="submit" value="삭제" class="btn btn-error" />
+            </form>
         </div>
     </div>
 </div>
+<script>
 
+    function deleteNote(form) {
+        form.submit();
+    }
+
+    function updateNote(form) {
+        const titleInput = document.querySelector("#title");
+        const contentInput = document.querySelector("#content");
+
+        // 새로운 input 요소 생성
+        const newTitleInput = document.createElement('input');
+        newTitleInput.type = 'hidden';
+        newTitleInput.name = 'title';
+        newTitleInput.value = titleInput.value;
+        form.appendChild(newTitleInput);
+
+        // 새로운 textarea 요소 생성
+        const newContentInput = document.createElement('textarea');
+        newContentInput.style.display = 'none';
+        newContentInput.name = 'content';
+        newContentInput.value = contentInput.value;
+        form.appendChild(newContentInput);
+
+        form.submit();
+    }
+
+</script>
 </body>
 </html>
