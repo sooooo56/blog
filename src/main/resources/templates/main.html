@@ -8,24 +8,27 @@
 </head>
 <body>
 <div class="logo bg-green-300 h-[10vh] p-2">
-    logo
+    <a href="/">logo</a>
 </div>
+
 <div class="content flex bg-yellow-300 h-[90vh]">
     <div class="left bg-red-300 h-[100%] w-[15%] p-2">
-        <ul>
+        <ul class="h-[90%] overflow-auto">
             <li th:class="${note.id == selectedNote.id} ? 'bg-blue-500' : ''" th:each="note : ${noteList}">
-                <a th:href="@{|/notes/${note.id}|}" th:text="${note.title}"></a>
+                <a class="block p-2" th:href="@{|/notes/${note.id}|}" th:text="${note.title}"></a>
             </li>
         </ul>
         <form action="/notes/write" method="post">
             <input type="submit" class="btn btn-info" value="추가"/>
         </form>
     </div>
+
     <div class="right bg-blue-300 h-[100%] w-[85%] p-2">
         <div class="flex flex-col gap-2">
             <input class="input" type="text" id="title" th:value="${selectedNote.title}">
             <textarea class="textarea textarea-bordered" id="content" th:text="${selectedNote.content}"></textarea>
         </div>
+
         <div class="flex mt-[10px]">
             <form th:action="@{|/notes/modify/${selectedNote.id}|}" method="post" onsubmit="updateNote(this); return false;">
                 <input type="submit" value="수정" class="btn btn-success"/>
@@ -39,10 +42,14 @@
 <script>
 
     function deleteNote(form) {
-        form.submit();
+
+        if(confirm("정말 삭제하시겠습니까?")) {
+            form.submit();
+        }
     }
 
     function updateNote(form) {
+
         const titleInput = document.querySelector("#title");
         const contentInput = document.querySelector("#content");
 
@@ -60,7 +67,9 @@
         newContentInput.value = contentInput.value;
         form.appendChild(newContentInput);
 
-        form.submit();
+        if(confirm("정말 수정하시겠습니까?")) {
+            form.submit();
+        }
     }
 
 </script>
