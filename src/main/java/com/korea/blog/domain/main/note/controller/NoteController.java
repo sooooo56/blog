@@ -1,5 +1,6 @@
 package com.korea.blog.domain.main.note.controller;
 
+import com.korea.blog.domain.main.MainService;
 import com.korea.blog.domain.main.note.entity.Note;
 import com.korea.blog.domain.main.note.service.NoteService;
 import lombok.RequiredArgsConstructor;
@@ -17,16 +18,11 @@ import java.util.List;
 @RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
+    private final MainService mainService;
 
     @GetMapping("")
     public String list() {
         return "main";
-    }
-
-    @PostMapping("/write")
-    public String write() {
-        noteService.saveDefault();
-        return "redirect:/";
     }
 
     @PostMapping("/delete/{noteId}")
