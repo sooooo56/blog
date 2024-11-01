@@ -30,6 +30,12 @@ public class NotebookController {
         return "redirect:/books/%d".formatted(notebook.getId());
     }
 
+    @PostMapping("/{bookId}/write")
+    public String writeSubBook(@PathVariable long bookId) {
+        Notebook subNotebook = notebookService.saveSubNotebook(bookId);
+        return "redirect:/books/%d/notes/%d".formatted(subNotebook.getId(), subNotebook.getNoteList().getFirst().getId());
+    }
+
     @PostMapping("/{bookId}/notes/write")
     public String writeNote(@PathVariable long bookId) {
         Note note = mainService.saveDefaultNote(bookId);
@@ -51,21 +57,6 @@ public class NotebookController {
 
         return "main";
     }
-
-//    @GetMapping("")
-//    public String list(Model model) {
-//
-//        List<Notebook> notebookList = notebookService.getList();
-//        List<Note> noteList = mainService.getNoteList();
-//        Note selectedNote = noteList.getFirst();
-//
-//        model.addAttribute("notebookList", notebookList);
-//        model.addAttribute("noteList", noteList);
-//        model.addAttribute("selectedNote", selectedNote);
-//
-//        return "main";
-//    }
-
     @GetMapping("/{bookId}")
     public String select(@PathVariable long bookId, Model model) {
 

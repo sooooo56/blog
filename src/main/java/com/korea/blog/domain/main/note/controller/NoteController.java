@@ -1,6 +1,5 @@
 package com.korea.blog.domain.main.note.controller;
 
-import com.korea.blog.domain.main.MainService;
 import com.korea.blog.domain.main.note.entity.Note;
 import com.korea.blog.domain.main.note.service.NoteService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import java.util.List;
 @RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
-    private final MainService mainService;
 
     @GetMapping("")
     public String list() {
@@ -33,9 +31,9 @@ public class NoteController {
 
     @PostMapping("/modify/{noteId}")
     public String modify(@PathVariable long noteId, String title, String content) {
-        noteService.modify(noteId, title, content);
+        Note note = noteService.modify(noteId, title, content);
 
-        return "redirect:/notes/%d".formatted(noteId);
+        return "redirect:/books/%d/notes/%d".formatted(note.getParent().getId(), noteId);
     }
 
     @GetMapping("/{noteId}")

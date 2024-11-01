@@ -22,10 +22,22 @@ public class Notebook {
 
     @OneToMany(mappedBy = "parent")
     @Builder.Default
-    List<Note> noteList = new ArrayList<>();
+    private List<Note> noteList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "parent")
+    @Builder.Default
+    private List<Notebook> subNotebookList = new ArrayList<>();
+
+    @ManyToOne
+    private Notebook parent;
 
     public void addNote(Note note) {
         note.setParent(this);
         noteList.add(note);
+    }
+
+    public void addSubNotebook(Notebook subNotebook) {
+        subNotebook.setParent(this);
+        subNotebookList.add(subNotebook);
     }
 }

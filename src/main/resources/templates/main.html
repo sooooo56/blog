@@ -12,19 +12,41 @@
 </div>
 <div class="content flex bg-yellow-300 h-[90vh]">
     <div class="left-book bg-red-500 h-[100%] w-[15%] p-2 ">
-        <ul class="h-[90%] overflow-auto">
-            <li th:class="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''" th:each="notebook : ${notebookList}">
-                <a class="block p-2" th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>
+        <ul class="menu bg-base-200 rounded-box w-[100%]">
+            <li th:class="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''"
+                th:each="notebook : ${notebookList}">
+                <th:block th:if="${#lists.size(notebook.subNotebookList) == 0} && notebook.parent == null">
+                    <a class="block p-2" th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>
+                </th:block>
+                <th:block th:unless="${#lists.size(notebook.subNotebookList) == 0}">
+                    <details open>
+                        <summary th:text="${notebook.name}"></summary>
+                        <ul>
+                            <li th:each="subNotebook : ${notebook.subNotebookList}" th:text="${subNotebook.name}">
+                                <a th:href="@{|/books/${subNotebook.id}|}"></a>
+                            </li>
+                        </ul>
+                    </details>
+                </th:block>
             </li>
         </ul>
+        <!--        <ul class="h-[90%] overflow-auto">-->
+        <!--            <li th:class="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''" th:each="notebook : ${notebookList}">-->
+        <!--                <a class="block p-2" th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>-->
+        <!--            </li>-->
+        <!--        </ul>-->
         <form action="/books/write" method="post">
             <input type="submit" class="btn btn-info" value="추가"/>
+        </form>
+        <form th:action="@{|/books/${selectedNotebook.id}/write|}" method="post">
+            <input type="submit" class="btn btn-info" value="하위 노트 추가"/>
         </form>
     </div>
     <div class="left-note bg-red-300 h-[100%] w-[15%] p-2 ">
         <ul class="h-[90%] overflow-auto">
             <li th:class="${note.id == selectedNote.id} ? 'bg-blue-500' : ''" th:each="note : ${noteList}">
-                <a class="block p-2" th:href="@{|/notes/${note.id}|}" th:text="${note.title}"></a>
+                <a class="block p-2" th:href="@{|/books/${selectedNotebook.id}/notes/${note.id}|}"
+                   th:text="${note.title}"></a>
             </li>
         </ul>
         <form th:action="@{|/books/${selectedNotebook.id}/notes/write|}" method="post">
