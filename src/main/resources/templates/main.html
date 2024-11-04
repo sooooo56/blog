@@ -15,15 +15,15 @@
         <ul class="menu bg-base-200 rounded-box w-[100%]">
             <li th:class="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''"
                 th:each="notebook : ${notebookList}">
-                <th:block th:if="${#lists.size(notebook.subNotebookList) == 0} && notebook.parent == null">
-                    <a class="block p-2" th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>
+                <th:block th:if="${#lists.size(notebook.subNotebookList) == 0 && notebook.parent == null}">
+                    <a class="block p-2 bg-green-300" th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>
                 </th:block>
                 <th:block th:unless="${#lists.size(notebook.subNotebookList) == 0}">
                     <details open>
-                        <summary th:text="${notebook.name}"></summary>
+                        <summary class="bg-purple-300" th:text="${notebook.name}"></summary>
                         <ul>
-                            <li th:each="subNotebook : ${notebook.subNotebookList}" th:text="${subNotebook.name}">
-                                <a th:href="@{|/books/${subNotebook.id}|}"></a>
+                            <li th:each="subNotebook : ${notebook.subNotebookList}">
+                                <a class="bg-green-500" th:href="@{|/books/${subNotebook.id}|}" th:text="${subNotebook.name}"></a>
                             </li>
                         </ul>
                     </details>

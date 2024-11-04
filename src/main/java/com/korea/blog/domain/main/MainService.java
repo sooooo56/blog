@@ -27,6 +27,18 @@ public class MainService {
     }
 
     @Transactional
+    public Notebook saveSubNotebook(long parentId) {
+        Notebook subNotebook = notebookService.saveSubNotebook(parentId);
+        Note note = noteService.saveDefault();
+
+        // 서브 노트북의 기본 노트 생성
+        subNotebook.addNote(note);
+
+        return subNotebook;
+    }
+
+
+    @Transactional
     public Notebook saveDefaultNotebook() {
         Notebook notebook = notebookService.saveDefault();
         Note note = noteService.saveDefault();
