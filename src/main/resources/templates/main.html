@@ -13,17 +13,18 @@
 <div class="content flex bg-yellow-300 h-[90vh]">
     <div class="left-book bg-red-500 h-[100%] w-[15%] p-2 ">
         <ul class="menu bg-base-200 rounded-box w-[100%]">
-            <li th:class="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''"
-                th:each="notebook : ${notebookList}">
+            <li th:each="notebook : ${notebookList}">
                 <th:block th:if="${#lists.size(notebook.subNotebookList) == 0 && notebook.parent == null}">
-                    <a class="block p-2 bg-green-300" th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>
+                    <a class="block p-2" th:classappend="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''" th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>
                 </th:block>
                 <th:block th:unless="${#lists.size(notebook.subNotebookList) == 0}">
                     <details open>
-                        <summary class="bg-purple-300" th:text="${notebook.name}"></summary>
+                        <summary th:classappend="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''" >
+                            <a th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>
+                        </summary>
                         <ul>
                             <li th:each="subNotebook : ${notebook.subNotebookList}">
-                                <a class="bg-green-500" th:href="@{|/books/${subNotebook.id}|}" th:text="${subNotebook.name}"></a>
+                                <a th:classappend="${subNotebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''" th:href="@{|/books/${subNotebook.id}|}" th:text="${subNotebook.name}"></a>
                             </li>
                         </ul>
                     </details>
@@ -39,7 +40,10 @@
             <input type="submit" class="btn btn-info" value="추가"/>
         </form>
         <form th:action="@{|/books/${selectedNotebook.id}/write|}" method="post">
-            <input type="submit" class="btn btn-info" value="하위 노트 추가"/>
+            <input type="submit" class="btn btn-info" value="하위 노트북 추가"/>
+        </form>
+        <form th:action="@{|/books/${selectedNotebook.id}/delete|}" method="post">
+            <input type="submit" class="btn btn-error" value="노트북 삭제"/>
         </form>
     </div>
     <div class="left-note bg-red-300 h-[100%] w-[15%] p-2 ">

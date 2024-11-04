@@ -52,4 +52,12 @@ public class NotebookService {
         }
 
     }
+
+    public void delete(long bookId) {
+        notebookRepository.deleteById(bookId);
+    }
+
+    public void delete(Notebook subNotebook) {
+        notebookRepository.delete(subNotebook);
+    }
 }

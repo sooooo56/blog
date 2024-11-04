@@ -26,6 +26,20 @@ public class MainService {
         }
     }
 
+    public void deleteNotebook(long bookId) {
+        Notebook deleteTarget = notebookService.getOne(bookId);
+        List<Notebook> subNotebookList = deleteTarget.getSubNotebookList();
+
+        for(Notebook subNotebook : subNotebookList) {
+            List<Note> noteList = subNotebook.getNoteList();
+            noteService.deleteAll(noteList);
+            notebookService.delete(subNotebook);
+        }
+
+        noteService.deleteAll(deleteTarget.getNoteList());
+        notebookService.delete(deleteTarget);
+    }
+
     @Transactional
     public Notebook saveSubNotebook(long parentId) {
         Notebook subNotebook = notebookService.saveSubNotebook(parentId);
