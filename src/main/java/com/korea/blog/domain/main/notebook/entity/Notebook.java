@@ -20,11 +20,11 @@ public class Notebook {
     private long id;
     private String name;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<Note> noteList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     @Builder.Default
     private List<Notebook> subNotebookList = new ArrayList<>();
 

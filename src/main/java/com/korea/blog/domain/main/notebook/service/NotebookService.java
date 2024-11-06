@@ -60,4 +60,11 @@ public class NotebookService {
     public void delete(Notebook subNotebook) {
         notebookRepository.delete(subNotebook);
     }
+
+    @Transactional
+    public Notebook modify(long bookId, String name) {
+        Notebook notebook = getOne(bookId);
+        notebook.setName(name);
+        return notebook;
+    }
 }
