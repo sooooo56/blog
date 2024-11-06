@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
-<div layout:fragment="content">
-  <h1>로그인 페이지</h1>
+<div class="h-[90vh] flex justify-center items-center" layout:fragment="content">
+  <form class="flex flex-col gap-4" th:action="@{/members/login}" method="post" onsubmit="validateLoginForm(this); return false;">
+    <input type="text" placeholder="로그인 ID" class="input input-bordered w-full max-w-xs" name="username"/>
+    <input type="password" placeholder="비밀번호" class="input input-bordered w-full max-w-xs" name="password">
+    <input class="btn max-w-xs" type="submit" value="로그인">
+  </form>
+  <script>
+    function validateLoginForm(form) {
+        if(form.username.value.trim().length == 0) {
+            alert("아이디를 입력해주세요.");
+            form.username.focus();
+            return;
+        }
+
+        if(form.password.value.trim().length == 0) {
+            alert("비밀번호를 입력해주세요.");
+            form.password.focus();
+            return;
+        }
+
+        form.submit();
+    }
+  </script>
 </div>
 </html>
