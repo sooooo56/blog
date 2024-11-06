@@ -2,14 +2,19 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
     <title>Title</title>
 </head>
 <body>
 <div class="logo flex justify-between items-center bg-green-300 h-[10vh] p-2">
     <a class="text-[30px] " href="/">logo</a>
-    <a href="/members/join">sign up</a>
+    <div class="flex gap-4">
+        <a href="/members/logout">logout</a>
+        <a href="/members/join">sign up</a>
+    </div>
 </div>
 <div layout:fragment="content">
 

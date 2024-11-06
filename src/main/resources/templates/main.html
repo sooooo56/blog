@@ -68,7 +68,8 @@
         <div class="right bg-blue-300 h-[100%] w-[70%] p-2">
             <div class="flex flex-col gap-2">
                 <input class="input" type="text" id="title" th:value="${selectedNote.title}">
-                <textarea class="textarea textarea-bordered" id="content" th:text="${selectedNote.content}"></textarea>
+                <!--                <textarea class="textarea textarea-bordered" id="content" th:text="${selectedNote.content}"></textarea>-->
+                <div id="editor"></div>
             </div>
             <div class="flex mt-[10px]">
                 <form th:action="@{|/notes/modify/${selectedNote.id}|}" method="post"
@@ -113,6 +114,19 @@
             }
         }
 
+    </script>
+
+    <script>
+        const Editor = toastui.Editor;
+
+        const editor = new Editor({
+          el: document.querySelector('#editor'),
+          height: '500px',
+          initialEditType: 'markdown',
+          previewStyle: 'vertical'
+        });
+
+        editor.getMarkdown();
     </script>
 </div>
 </html>
