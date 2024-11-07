@@ -1,14 +1,11 @@
 package com.korea.blog.domain.main;
 
-import com.korea.blog.domain.main.note.entity.Note;
-import com.korea.blog.domain.main.notebook.entity.Notebook;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,18 +20,10 @@ public class MainController {
 
     // 초기 화면 -> 첫번째 노트북의 첫번째 노트가 선택되도록 약속
     @GetMapping("/")
-    public String main(Model model) {
+    public String main(Model model, @RequestParam(defaultValue = "") String keyword) {
 
-        List<Notebook> notebookList = mainService.getNoteBookList();
-        Notebook selectedNotebook = notebookList.getFirst();
-
-        List<Note> noteList = mainService.getNoteList();
-        Note selectedNote = noteList.getFirst();
-
-        model.addAttribute("notebookList", notebookList);
-        model.addAttribute("noteList", noteList);
-        model.addAttribute("selectedNote", selectedNote);
-        model.addAttribute("selectedNotebook", selectedNotebook);
+        MainDataDto mainDataDto = mainService.getDefaultMainDataDto(keyword);
+        model.addAttribute("mainDataDto", mainDataDto);
 
         return "main";
     }

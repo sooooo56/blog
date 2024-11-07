@@ -26,19 +26,19 @@ public class MainService {
         }
     }
 
-    public void deleteNotebook(long bookId) {
-        Notebook deleteTarget = notebookService.getOne(bookId);
-        List<Notebook> subNotebookList = deleteTarget.getSubNotebookList();
-
-        for(Notebook subNotebook : subNotebookList) {
-            List<Note> noteList = subNotebook.getNoteList();
-            noteService.deleteAll(noteList);
-            notebookService.delete(subNotebook);
-        }
-
-        noteService.deleteAll(deleteTarget.getNoteList());
-        notebookService.delete(deleteTarget);
-    }
+//    public void deleteNotebook(long bookId) {
+//        Notebook deleteTarget = notebookService.getOne(bookId);
+//        List<Notebook> subNotebookList = deleteTarget.getSubNotebookList();
+//
+//        for(Notebook subNotebook : subNotebookList) {
+//            List<Note> noteList = subNotebook.getNoteList();
+//            noteService.deleteAll(noteList);
+//            notebookService.delete(subNotebook);
+//        }
+//
+//        noteService.deleteAll(deleteTarget.getNoteList());
+//        notebookService.delete(deleteTarget);
+//    }
 
     @Transactional
     public Notebook saveSubNotebook(long parentId) {
@@ -81,5 +81,44 @@ public class MainService {
 
     public List<Notebook> getNoteBookList() {
         return notebookService.getList();
+    }
+
+    public List<Notebook> getSearchedNotebookList(String keyword) {
+        return notebookService.getSearchedList(keyword);
+    }
+
+    public List<Note> getSearchedNoteList(String keyword) {
+        return noteService.getSearchedList(keyword);
+    }
+
+    public MainDataDto getMainDataDto(long bookId, long noteId, String keyword) {
+        List<Notebook> notebookList = getNoteBookList();
+        Notebook selectedNotebook = notebookService.getOne(bookId);
+
+        List<Note> noteList = selectedNotebook.getNoteList();
+        Note selectedNote = noteService.getOne(noteId);
+
+        List<Notebook> searchedNotebookList = getSearchedNotebookList(keyword);
+        List<Note> searchedNoteList = getSearchedNoteList(keyword);
+
+        return MainDataDto.builder()
+                .notebookList(notebookList)
+                .selectedNotebook(selectedNotebook)
+                .noteList(noteList)
+                .selectedNote(selectedNote)
+                .searchedNotebookList(searchedNotebookList)
+                .searchedNoteList(searchedNoteList)
+                .build();
+    }
+
+    public MainDataDto getDefaulNoteMainDataDto(long bookId, String keyword) {
+        Notebook notebook = notebookService.getOne(bookId);
+        long noteId = notebook.getNoteList().getFirst().getId();
+        return getMainDataDto(bookId, noteId, keyword);
+    }
+
+    public MainDataDto getDefaultMainDataDto(String keyword) {
+        Notebook firstNotebook = notebookService.getList().getFirst();
+        return getDefaulNoteMainDataDto(firstNotebook.getId(), keyword);
     }
 }

@@ -67,4 +67,8 @@ public class NotebookService {
         notebook.setName(name);
         return notebook;
     }
+
+    public List<Notebook> getSearchedList(String keyword) {
+        return notebookRepository.findByNameContaining(keyword);
+    }
 }

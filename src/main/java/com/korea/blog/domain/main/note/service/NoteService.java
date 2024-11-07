@@ -51,4 +51,8 @@ public class NoteService {
     public void deleteAll(List<Note> noteList) {
         noteRepository.deleteAll(noteList);
     }
+
+    public List<Note> getSearchedList(String keyword) {
+        return noteRepository.findByTitleContaining(keyword);
+    }
 }

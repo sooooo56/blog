@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{layout}">
-<div layout:fragment="content">
+<div layout:fragment="content" th:with="
+    notebookList = ${mainDataDto.notebookList},
+    noteList = ${mainDataDto.noteList},
+    selectedNotebook = ${mainDataDto.selectedNotebook},
+    selectedNote = ${mainDataDto.selectedNote},
+    searchedNotebookList = ${mainDataDto.searchedNotebookList},
+    searchedNoteList = ${mainDataDto.searchedNoteList}
+">
     <dialog id="my_modal_1" class="modal">
         <div class="modal-box">
             <div class="flex justify-center modal-action">
@@ -13,6 +20,27 @@
                     <button class="btn btn-error">닫기</button>
                 </form>
             </div>
+        </div>
+    </dialog>
+    <dialog id="my_modal_2" class="modal">
+        <div class="modal-box h-[50vh] flex flex-col gap-4">
+            <form class="flex justify-center gap-4" action="/">
+                <input type="text" class="input input-bordered" name="keyword">
+                <input type="submit" class="btn btn-success" value="검색">
+            </form>
+            <div class="border h-[80%]">
+                <ul>
+                    <li th:each="notebook : ${searchedNotebookList}">
+                        <a href="#" th:text="${notebook.name}"></a>
+                    </li>
+                    <li th:each="note : ${searchedNoteList}">
+                        <a href="#" th:text="${note.title}"></a>
+                    </li>
+                </ul>
+            </div>
+            <form method="dialog" class="flex justify-end">
+                <button class="btn btn-error">닫기</button>
+            </form>
         </div>
     </dialog>
     <div class="content flex h-[90vh]">
@@ -43,7 +71,7 @@
             <!--                <a class="block p-2" th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>-->
             <!--            </li>-->
             <!--        </ul>-->
-            <form action="/books/write" method="post">
+            <form th:action="@{/books/write}" method="post">
                 <input type="submit" class="btn btn-info" value="추가"/>
             </form>
             <form th:action="@{|/books/${selectedNotebook.id}/write|}" method="post">
@@ -53,6 +81,7 @@
                 <input type="submit" class="btn btn-error" value="노트북 삭제"/>
             </form>
             <button class="btn" onclick="my_modal_1.showModal()">노트북 이름 변경</button>
+            <button class="btn" onclick="my_modal_2.showModal()">검색</button>
         </div>
         <div class="left-note border border-black h-[100%] w-[15%] p-2 ">
             <ul class="h-[90%] overflow-auto">
@@ -83,7 +112,6 @@
             </div>
         </div>
     </div>
-
     <script th:inline="javascript">
         const Editor = toastui.Editor;
 
