@@ -64,10 +64,12 @@ public class NotebookController {
     }
 
     @GetMapping("/{bookId}")
-    public String select(@PathVariable long bookId, @RequestParam(defaultValue = "") String keyword, Model model) {
+    public String select(@PathVariable long bookId, @RequestParam(defaultValue = "") String keyword, String isModalOpen, Model model) {
 
         MainDataDto mainDataDto = mainService.getDefaulNoteMainDataDto(bookId, keyword);
         model.addAttribute("mainDataDto", mainDataDto);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("isModalOpen", isModalOpen);
 
         return "main";
     }

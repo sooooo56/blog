@@ -20,10 +20,12 @@ public class MainController {
 
     // 초기 화면 -> 첫번째 노트북의 첫번째 노트가 선택되도록 약속
     @GetMapping("/")
-    public String main(Model model, @RequestParam(defaultValue = "") String keyword) {
+    public String main(Model model, @RequestParam(defaultValue = "") String keyword, @RequestParam(defaultValue = "false") String isModalOpen) {
 
         MainDataDto mainDataDto = mainService.getDefaultMainDataDto(keyword);
         model.addAttribute("mainDataDto", mainDataDto);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("isModalOpen", isModalOpen);
 
         return "main";
     }

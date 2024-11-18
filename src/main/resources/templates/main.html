@@ -25,7 +25,8 @@
     <dialog id="my_modal_2" class="modal">
         <div class="modal-box h-[50vh] flex flex-col gap-4">
             <form class="flex justify-center gap-4" action="/">
-                <input type="text" class="input input-bordered" name="keyword">
+                <input type="text" class="input input-bordered" name="keyword" th:value="${keyword}">
+                <input type="hidden" name="isModalOpen" value="true"/>
                 <input type="submit" class="btn btn-success" value="검색">
             </form>
             <div class="border h-[80%]">
@@ -49,7 +50,7 @@
                 <li th:each="notebook : ${notebookList}">
                     <th:block th:if="${#lists.size(notebook.subNotebookList) == 0 && notebook.parent == null}">
                         <a class="block p-2" th:classappend="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''"
-                           th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>
+                           th:href="@{|/books/${notebook.id}?keyword=${keyword}&isModalOpen=false|}" th:text="${notebook.name}"></a>
                     </th:block>
                     <th:block th:unless="${#lists.size(notebook.subNotebookList) == 0}">
                         <details open>
@@ -81,6 +82,7 @@
                 <input type="submit" class="btn btn-error" value="노트북 삭제"/>
             </form>
             <button class="btn" onclick="my_modal_1.showModal()">노트북 이름 변경</button>
+            <input type="hidden" id="isModalOpen" th:value="${isModalOpen}" />
             <button class="btn" onclick="my_modal_2.showModal()">검색</button>
         </div>
         <div class="left-note border border-black h-[100%] w-[15%] p-2 ">
@@ -112,6 +114,17 @@
             </div>
         </div>
     </div>
+    <script>
+
+        const isModalOpen = document.querySelector("#isModalOpen");
+        const isModalOpenVal = isModalOpen.value;
+
+        console.log(isModalOpenVal);
+
+        if(isModalOpenVal === "true") {
+            my_modal_2.showModal();
+        }
+    </script>
     <script th:inline="javascript">
         const Editor = toastui.Editor;
 
