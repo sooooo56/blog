@@ -38,12 +38,12 @@
                 <ul>
                     <li th:each="notebook : ${searchedNotebookList}">
                         <i class="fa-solid fa-book"></i>
-                        <a th:href="${@urlParamManager.getParamUrl('/books/' + notebook.id)}"
+                        <a th:href="${@urlParamManager.getBookUrl(notebook.id)}"
                            th:text="${notebook.name}"></a>
                     </li>
                     <li th:each="note : ${searchedNoteList}">
                         <i class="fa-solid fa-file-lines"></i>
-                        <a th:href="${@urlParamManager.getParamUrl('/books/' + note.parent.id + '/notes/' + note.id)}"
+                        <a th:href="${@urlParamManager.getNoteUrl(note.parent.id, note.id)}"
                            th:text="${note.title}"></a>
                     </li>
                 </ul>
@@ -54,11 +54,6 @@
         </div>
     </dialog>
     <div class="content flex h-[90vh]">
-        <div id="params">
-            <input type="hidden" id="keyword" th:value="${keyword}" />
-            <input type="hidden" id="isModalOpen" th:value="${isModalOpen}" />
-            <input type="hidden" id="sortTarget" th:value="${sortTarget}" />
-        </div>
         <div class="left-book border border-black h-[100%] w-[15%] p-2 ">
             <ul class="menu bg-base-200 rounded-box w-[100%]">
                 <li th:each="notebook : ${notebookList}">
@@ -70,12 +65,12 @@
                     <th:block th:unless="${#lists.size(notebook.subNotebookList) == 0}">
                         <details open>
                             <summary th:classappend="${notebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''">
-                                <a th:href="@{|/books/${notebook.id}|}" th:text="${notebook.name}"></a>
+                                <a th:href="${@urlParamManager.getBookUrl(notebook.id)}" th:text="${notebook.name}"></a>
                             </summary>
                             <ul>
                                 <li th:each="subNotebook : ${notebook.subNotebookList}">
                                     <a class="bookAnchor" th:classappend="${subNotebook.id == selectedNotebook.id} ? 'bg-blue-500' : ''"
-                                       th:href="${@urlParamManager.getParamUrl('/books/' + subNotebook.id)}" th:text="${subNotebook.name}"></a>
+                                       th:href="${@urlParamManager.getBookUrl(subNotebook.id)}" th:text="${subNotebook.name}"></a>
                                 </li>
                             </ul>
                         </details>
@@ -112,6 +107,7 @@
             </ul>
             <div class="flex gap-3">
                 <form th:action="@{|/books/${selectedNotebook.id}/notes/write|}" method="post">
+                    <th:block th:insert="fragment::params(${keyword}, ${isModalOpen}, ${sortTarget})" ></th:block>
                     <input type="submit" class="btn btn-info" value="추가"/>
                 </form>
                 <a th:href="@{|/books/${selectedNotebook.id}/notes/${selectedNote.id}?keyword=${keyword}&isModalOpen=${isModalOpen}&sortTarget=id|}" class="btn">날짜순</a>
@@ -121,7 +117,7 @@
         <div class="right border border-black h-[100%] w-[70%] p-2">
             <div class="flex flex-col gap-2">
                 <input class="input" type="text" id="title" th:value="${selectedNote.title}">
-                <!--                <textarea class="textarea textarea-bordered" id="content" th:text="${selectedNote.content}"></textarea>-->
+                <!-- <textarea class="textarea textarea-bordered" id="content" th:text="${selectedNote.content}"></textarea>-->
                 <div id="editor"></div>
             </div>
             <div class="flex mt-[10px]">
