@@ -91,11 +91,18 @@ public class MainService {
         return noteService.getSearchedList(keyword);
     }
 
-    public MainDataDto getMainDataDto(long bookId, long noteId, String keyword) {
+    public MainDataDto getMainDataDto(long bookId, long noteId, String keyword,String sortTarget) {
         List<Notebook> notebookList = getNoteBookList();
         Notebook selectedNotebook = notebookService.getOne(bookId);
 
-        List<Note> noteList = selectedNotebook.getNoteList();
+        List<Note> noteList;
+
+        if (sortTarget.equals("title")){
+            noteList = noteService.getListOrderByTitleAsc(selectedNotebook.getId());
+        } else {
+            noteList = noteService.getListOrderByIdDesc(selectedNotebook.getId());
+        }
+
         Note selectedNote = noteService.getOne(noteId);
 
         List<Notebook> searchedNotebookList = getSearchedNotebookList(keyword);
@@ -111,14 +118,14 @@ public class MainService {
                 .build();
     }
 
-    public MainDataDto getDefaulNoteMainDataDto(long bookId, String keyword) {
+    public MainDataDto getDefaulNoteMainDataDto(long bookId, String keyword,String sortTarget) {
         Notebook notebook = notebookService.getOne(bookId);
         long noteId = notebook.getNoteList().getFirst().getId();
-        return getMainDataDto(bookId, noteId, keyword);
+        return getMainDataDto(bookId, noteId, keyword,sortTarget);
     }
 
-    public MainDataDto getDefaultMainDataDto(String keyword) {
+    public MainDataDto getDefaultMainDataDto(String keyword,String sortTarget) {
         Notebook firstNotebook = notebookService.getList().getFirst();
-        return getDefaulNoteMainDataDto(firstNotebook.getId(), keyword);
+        return getDefaulNoteMainDataDto(firstNotebook.getId(), keyword,sortTarget);
     }
 }

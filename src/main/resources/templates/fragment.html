@@ -1,0 +1,5 @@
+<th:block th:fragment="params(keyword, isModalOpen, sortTarget)">
+    <input type="hidden" name="keyword" th:value="${keyword}">
+    <input type="hidden" name="isModalOpen" th:value="${isModalOpen}">
+    <input type="hidden" name="sortTarget" th:value="${sortTarget}">
+</th:block>

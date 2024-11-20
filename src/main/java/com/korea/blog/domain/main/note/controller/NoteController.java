@@ -2,6 +2,7 @@ package com.korea.blog.domain.main.note.controller;
 
 import com.korea.blog.domain.main.note.entity.Note;
 import com.korea.blog.domain.main.note.service.NoteService;
+import com.korea.blog.global.dto.UrlParamManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,16 +25,16 @@ public class NoteController {
     }
 
     @PostMapping("/delete/{noteId}")
-    public String delete(@PathVariable long noteId) {
+    public String delete(@PathVariable long noteId, UrlParamManager urlParamManager) {
         noteService.delete(noteId);
-        return "redirect:/";
+        return urlParamManager.getRedirectUrl("/");
     }
 
     @PostMapping("/modify/{noteId}")
-    public String modify(@PathVariable long noteId, String title, String content) {
+    public String modify(@PathVariable long noteId, String title, String content, UrlParamManager urlParamManager) {
         Note note = noteService.modify(noteId, title, content);
 
-        return "redirect:/books/%d/notes/%d".formatted(note.getParent().getId(), noteId);
+        return urlParamManager.getRedirectUrl("/books/%d/notes/%d".formatted(note.getParent().getId(), noteId));
     }
 
     @GetMapping("/{noteId}")
